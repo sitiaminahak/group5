@@ -18,24 +18,24 @@ import com.ntu.edu.group5.ecommerce.exception.ProductNotFoundException;
 
 @RestController
 @RequestMapping("/products")
-public class productController {
+public class ProductController {
 
     private ArrayList<Product> products = new ArrayList<>();
 
-    public productController() {
+    public ProductController() {
         products.add(new Product("Ipad", "Technological Product from Apple", 1899.99));
         products.add(new Product("Apple Pen", "Technological stylus from Apple", 98.99));
         products.add(new Product("Sumsung Galaxy watch", "Technological Product from Samsung", 499.0));
     }
 
     //helper method
-    private int getProductIndex(String id) {
+    private int getProductIndex(String productId) {
         for(Product product: products) {
-            if(product.getId().equals(id)){
+            if(product.getProductId().equals(productId)){
                 return products.indexOf(product);
             }
         }
-        throw new ProductNotFoundException(id);
+        throw new ProductNotFoundException(productId);
     }
 
     @GetMapping({"/", "" })

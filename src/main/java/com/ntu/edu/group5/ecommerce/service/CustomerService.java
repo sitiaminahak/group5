@@ -16,7 +16,5 @@ public interface CustomerService {
 
     void deleteCustomer(Long id);
 
-    //Interaction addInteractionToCustomer(Long id, Interaction interaction);
-
     ArrayList<Customer> searchCustomers(String firstName);
 }

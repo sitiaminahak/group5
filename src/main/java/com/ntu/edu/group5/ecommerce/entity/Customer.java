@@ -1,18 +1,14 @@
 package com.ntu.edu.group5.ecommerce.entity;
 
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 import org.hibernate.validator.constraints.Range;
 
@@ -28,7 +24,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "customer")
 public class Customer {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -57,9 +53,6 @@ public class Customer {
     @Range(min = 1940, max = 2005, message = "Year Of Birth should be between 1940 and 2005")
     @Column(name = "year_of_birth")
     private int yearOfBirth;
-
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private List<Interaction> interactions;
 
     public Customer(){}
 
