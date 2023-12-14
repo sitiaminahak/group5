@@ -2,31 +2,32 @@ package com.ntu.edu.group5.ecommerce;
 
 import org.springframework.stereotype.Component;
 
-import com.ntu.edu.group5.ecommerce.entity.Cart;
-import com.ntu.edu.group5.ecommerce.entity.CartItem;
-import com.ntu.edu.group5.ecommerce.entity.Category;
-import com.ntu.edu.group5.ecommerce.entity.Customer;
-import com.ntu.edu.group5.ecommerce.entity.Product;
-import com.ntu.edu.group5.ecommerce.entity.Seller;
-import com.ntu.edu.group5.ecommerce.entity.Status;
+import com.ntu.edu.group5.ecommerce.entity.*;
+
+import com.ntu.edu.group5.ecommerce.repository.AddressRepository;
 import com.ntu.edu.group5.ecommerce.repository.CartItemRepository;
 import com.ntu.edu.group5.ecommerce.repository.CartRepository;
 import com.ntu.edu.group5.ecommerce.repository.CustomerRepository;
 import com.ntu.edu.group5.ecommerce.repository.OrderRepository;
 import com.ntu.edu.group5.ecommerce.repository.ProductRepository;
 import com.ntu.edu.group5.ecommerce.repository.SellerRepository;
+import com.ntu.edu.group5.ecommerce.service.AddressServiceImpl;
 import com.ntu.edu.group5.ecommerce.service.CartItemService;
 import com.ntu.edu.group5.ecommerce.service.CartItemServiceImpl;
 import com.ntu.edu.group5.ecommerce.service.CartServiceImpl;
+import com.ntu.edu.group5.ecommerce.service.CustomerServiceImpl;
 import com.ntu.edu.group5.ecommerce.service.OrderService;
 import com.ntu.edu.group5.ecommerce.service.OrderServiceImpl;
+import com.ntu.edu.group5.ecommerce.service.ProductServiceImpl;
 
 import jakarta.annotation.PostConstruct;
 
 @Component
 public class DataLoaderJian {
         private CustomerRepository customerRepository;
+        private CustomerServiceImpl customerServiceImpl;
         private ProductRepository productRepository;
+        private ProductServiceImpl productServiceImpl;
         private CartRepository cartRepository;
         private SellerRepository sellerRepository;
         private CartItemRepository cartItemRepository;
@@ -34,16 +35,26 @@ public class DataLoaderJian {
         private OrderServiceImpl orderServiceImpl;
         private CartItemServiceImpl cartItemServiceImpl;
         private CartServiceImpl cartServiceImpl;
+        private AddressRepository addressRepository;
+        private AddressServiceImpl addressServiceImpl;
 
-        public DataLoaderJian(CustomerRepository customerRepository, ProductRepository productRepository,
-                        CartRepository cartRepository, SellerRepository sellerRepository,
+        public DataLoaderJian(CustomerRepository customerRepository,
+                        CustomerServiceImpl customerServiceImpl,
+                        ProductRepository productRepository,
+                        ProductServiceImpl productServiceImpl,
+                        CartRepository cartRepository,
+                        SellerRepository sellerRepository,
                         CartItemRepository cartItemRepository,
                         OrderRepository orderRepository,
                         OrderServiceImpl orderServiceImpl,
                         CartItemServiceImpl cartItemServiceImpl,
-                        CartServiceImpl cartServiceImpl){
+                        CartServiceImpl cartServiceImpl,
+                        AddressRepository addressRepository,
+                        AddressServiceImpl addressServiceImpl){
                 this.customerRepository = customerRepository;
+                this.customerServiceImpl = customerServiceImpl;
                 this.productRepository = productRepository;
+                this.productServiceImpl = productServiceImpl;
                 this.cartRepository = cartRepository;
                 this.sellerRepository = sellerRepository;
                 this.cartItemRepository = cartItemRepository;
@@ -51,6 +62,8 @@ public class DataLoaderJian {
                 this.orderServiceImpl = orderServiceImpl;
                 this.cartItemServiceImpl=cartItemServiceImpl;
                 this.cartServiceImpl =cartServiceImpl;
+                this.addressRepository = addressRepository;
+                this.addressServiceImpl = addressServiceImpl;
         }
 
         @PostConstruct
@@ -60,81 +73,103 @@ public class DataLoaderJian {
                 productRepository.deleteAll();
 
                 // load data here
-                // [Activity 2 - validation]
-                customerRepository.save(new Customer("Catherine", "Tiong", "12345678", 2000));
-                customerRepository.save(new Customer("Siti ","Aminah", "56771234", 2001));
-                customerRepository.save(new Customer("Sariha", "IDK", "12783456", 2002));
-                customerRepository.save(new Customer("Sara", "Saranya", "56781234", 2003));
-                customerRepository.save(new Customer("ZJ", "Lee", "56234781", 2004));
-                customerRepository.save(new Customer("Sam", "Altman", "88888888", 2000));
-                customerRepository.save(new Customer("Mark ","Zuckerberg", "11111111", 1990));
-                customerRepository.save(new Customer("Linus", "Torvald", "22222222", 1991));
-                customerRepository.save(new Customer("Elon", "Musk", "3333333", 1992));
-                customerRepository.save(new Customer("Andrew", "Ng", "11111111", 1993));
+                // customers 1-10
+                customerServiceImpl.createCustomer("Catherine", "Tiong", "catt@gmail.com", "12345678", 1990);
+                customerServiceImpl.createCustomer("Siti", "Aminah K", "sitiamk@gmail.com", "12345678", 1991);
+                customerServiceImpl.createCustomer("Sariha", "Sareeha", "sariha@gmail.com", "12345678", 1992);
+                customerServiceImpl.createCustomer("Sara", "Saranya", "sara@gmail.com", "12345678", 1993);
+                customerServiceImpl.createCustomer("ZJ", "Lee", "zjlee@gmail.com", "12345678", 1994);
+                customerServiceImpl.createCustomer("Sam", "Altman", "saltman@openai.com", "12345678", 1995);
+                customerServiceImpl.createCustomer("Mark", "Zuckerberg", "zuck@fb.com", "12345678", 1996);
+                customerServiceImpl.createCustomer("Linus", "Torvald", "lt@linux.com", "12345678", 1997);
+                customerServiceImpl.createCustomer("Elon", "Musk", "elonm@spacex.com", "12345678", 1998);
+                customerServiceImpl.createCustomer("Andrew", "Ng", "andrewng@stanford.com", "12345678", 1999);
 
+                //address 1 - 10
+                addressServiceImpl.createAddressByCustomerId(1,"15", "Jalan Tukang", "Smith Place", "SG", "SG", "670455");
+                addressServiceImpl.createAddressByCustomerId(1,"20", "Jalan Bakar", "Burns", "SG", "SG", "670456");
+                addressServiceImpl.createAddressByCustomerId(1,"25", "Jalan Tunang", "Engaged Building", "SG", "SG", "670456");
+                addressServiceImpl.createAddressByCustomerId(2,"30", "Kampung Java", "Java Village", "SG", "SG", "670457");
+                addressServiceImpl.createAddressByCustomerId(2,"35", "Jalan Satay", "Satay Street", "SG", "SG", "670458");
+                addressServiceImpl.createAddressByCustomerId(3,"40", "Kay Poh Road", "Busy Body Inc", "SG", "SG", "670459");
+                addressServiceImpl.createAddressByCustomerId(3,"45", "Lorong Lew Lian", "Durian Hub", "SG", "SG", "670460");
+                addressServiceImpl.createAddressByCustomerId(4,"50", "Rotan Lane", "Discipline Place", "SG", "SG", "670461");
+                addressServiceImpl.createAddressByCustomerId(4,"55", "Pending Road", "Wait Long Long", "SG", "SG", "670462");
+                addressServiceImpl.createAddressByCustomerId(5,"55", "Jalan Malu Malu", "Shy", "SG", "SG", "670462");
+                //address 11-15
+                addressServiceImpl.createAddressByCustomerId(5,"60", "Jalan Langgar", "Crash Zone", "SG", "SG", "670463");
+                addressServiceImpl.createAddressByCustomerId(6,"65", "Jalan Pisang", "Banana", "SG", "SG", "670464");
+                addressServiceImpl.createAddressByCustomerId(7,"70", "Kallang Pudding Road", "Pudding", "SG", "SG", "670464");
+                addressServiceImpl.createAddressByCustomerId(8,"75", "Sandwich Road", "Delicious", "SG", "SG", "670465");
+                addressServiceImpl.createAddressByCustomerId(9,"80", "Cheow Keng Road", "Escape", "SG", "SG", "670466");
+                addressServiceImpl.createAddressByCustomerId(10,"85", "Robinson Road", "Robbing son", "SG", "SG", "670467");
+
+                //sellers creation
+
+                sellerRepository.save(new Seller("John", "Doe", "johndoe@eshop.com", "12345678", "password!"));
+                sellerRepository.save(new Seller("Bill", "Gates", "billgates@microsoft.com", "12345678", "12345678!"));
+                sellerRepository.save(new Seller("Andrew", "Gates", "billgates@microsoft.com", "12345678", "12345678!"));
 
                 // productRepository 1-10
-                productRepository.save(
-                                new Product("Ipad", 1, "Technological Product from Apple", Category.ELECTRONICS,
-                                Status.ACTIVE, 900.99, "Apple Inc"));
-                productRepository.save(
-                                new Product("Apple Pen", 2, "Technological stylus from Apple", Category.ELECTRONICS,
-                                Status.ACTIVE, 98.99, "Apple Inc"));
-                productRepository.save(new Product("Sumsung Galaxy watch", 1, "Technological Product from Samsung",
-                                Category.ELECTRONICS, Status.ACTIVE, 499.0,
-                                "Samsung Electronics"));
-                productRepository.save(new Product("Ideapad Slim 5", 1, "Laptop",
-                                Category.ELECTRONICS, Status.ACTIVE, 1200.0,
-                                "Lenovo"));
-                productRepository.save(new Product("Surface Pro", 1, "Tablet PC",
-                                Category.ELECTRONICS, Status.ACTIVE, 1600.0,
-                                "MiloSoft"));
-                productRepository.save(new Product("Macbook", 1, "Apple product",
+
+                productServiceImpl.createProductSetSeller(1,"Macbook", 1, "Apple product",
                                 Category.ELECTRONICS, Status.ACTIVE, 1900.0,
-                                "Ping Guo Inc"));
-                productRepository.save(new Product("Macbook Pro", 1, "Apple product",
+                                "Ping Guo Inc");
+                productServiceImpl.createProductSetSeller(1,"Macbook Pro", 1, "Apple product",
                                 Category.ELECTRONICS, Status.ACTIVE, 3700.0,
-                                "Ping Guo Inc"));
-                productRepository.save(new Product("Samsung Fold", 1, "Android Folding Phone",
+                                "Ping Guo Inc");
+                productServiceImpl.createProductSetSeller(1,"Samsung Fold", 1, "Android Folding Phone",
                                 Category.ELECTRONICS, Status.ACTIVE, 2200.0,
-                                "Somesong"));
-                productRepository.save(new Product("Iphone 15 Max", 1, "Apple Phone",
+                                "Somesong");
+                productServiceImpl.createProductSetSeller(1,"Iphone 15 Max", 1, "Apple Phone",
                                 Category.ELECTRONICS, Status.ACTIVE, 2300.0,
-                                "Ping Guo Inc"));
-                productRepository.save(new Product("Google Pixel", 1, "Android Phone",
+                                "Ping Guo Inc");
+                productServiceImpl.createProductSetSeller(1,"Google Pixel", 1, "Android Phone",
                                 Category.ELECTRONICS, Status.ACTIVE, 1800.0,
-                                "Googol"));
+                                "Googol");
+                productServiceImpl.createProductSetSeller(1,"Ipad", 1, "Technological Product from Apple", Category.ELECTRONICS,
+                                Status.ACTIVE, 900.99, "Apple Inc");
+                productServiceImpl.createProductSetSeller(2,"Apple Pen", 2, "Technological stylus from Apple", Category.ELECTRONICS,
+                                Status.ACTIVE, 98.99, "Apple Inc");
+                productServiceImpl.createProductSetSeller(2,"Sumsung Galaxy watch", 1, "Technological Product from Samsung",
+                                Category.ELECTRONICS, Status.ACTIVE, 499.0,"Samsung Electronics");
+                productServiceImpl.createProductSetSeller(2,"Ideapad Slim 5", 1, "Laptop",
+                                Category.ELECTRONICS, Status.ACTIVE, 1200.0,
+                                "Lenovo");
+                productServiceImpl.createProductSetSeller(2,"Surface Pro", 1, "Tablet PC",
+                                Category.ELECTRONICS, Status.ACTIVE, 1600.0,
+                                "MiloSoft");
+
+
                 // product 11 to 20
-                productRepository.save(
-                                new Product("Ipad 9", 1, "Technological Product from Apple", Category.ELECTRONICS,
-                                Status.ACTIVE, 1000.99, "Apple Inc"));
-                productRepository.save(
-                                new Product("Apple Pen 5", 2, "Technological stylus from Apple", Category.ELECTRONICS,
-                                Status.ACTIVE, 200.99, "Apple Inc"));
-                productRepository.save(new Product("Sumsung Galaxy watch 5", 1, "Technological Product from Samsung",
+                productServiceImpl.createProductSetSeller(2,"Ipad 9", 1, "Technological Product from Apple", Category.ELECTRONICS,
+                                Status.ACTIVE, 1000.99, "Apple Inc");
+                productServiceImpl.createProductSetSeller(2,"Apple Pen 5", 2, "Technological stylus from Apple", Category.ELECTRONICS,
+                                Status.ACTIVE, 200.99, "Apple Inc");
+                productServiceImpl.createProductSetSeller(2,"Sumsung Galaxy watch 5", 1, "Technological Product from Samsung",
                                 Category.ELECTRONICS, Status.ACTIVE, 599.0,
-                                "Samsung Electronics"));
-                productRepository.save(new Product("Ideapad Slim 6", 1, "Laptop",
+                                "Samsung Electronics");
+                productServiceImpl.createProductSetSeller(3,"Ideapad Slim 6", 1, "Laptop",
                                 Category.ELECTRONICS, Status.ACTIVE, 1300.0,
-                                "Lenovo"));
-                productRepository.save(new Product("Surface Pro 10", 1, "Tablet PC",
+                                "Lenovo");
+                productServiceImpl.createProductSetSeller(3,"Surface Pro 10", 1, "Tablet PC",
                                 Category.ELECTRONICS, Status.ACTIVE, 1900.0,
-                                "MiloSoft"));
-                productRepository.save(new Product("Macbook 10", 1, "Apple product",
+                                "MiloSoft");
+                productServiceImpl.createProductSetSeller(3,"Macbook 10", 1, "Apple product",
                                 Category.ELECTRONICS, Status.ACTIVE, 1800.0,
-                                "Ping Guo Inc"));
-                productRepository.save(new Product("Macbook Pro 10", 1, "Apple product",
+                                "Ping Guo Inc");
+                productServiceImpl.createProductSetSeller(3,"Macbook Pro 10", 1, "Apple product",
                                 Category.ELECTRONICS, Status.ACTIVE, 3900.0,
-                                "Ping Guo Inc"));
-                productRepository.save(new Product("Samsung Fold 2", 1, "Android Folding Phone",
+                                "Ping Guo Inc");
+                productServiceImpl.createProductSetSeller(3,"Samsung Fold 2", 1, "Android Folding Phone",
                                 Category.ELECTRONICS, Status.ACTIVE, 2200.0,
-                                "Somesong"));
-                productRepository.save(new Product("Iphone 20 Max", 1, "Apple Phone",
+                                "Somesong");
+                productServiceImpl.createProductSetSeller(3,"Iphone 20 Max", 1, "Apple Phone",
                                 Category.ELECTRONICS, Status.ACTIVE, 2500.0,
-                                "Ping Guo Inc"));
-                productRepository.save(new Product("Google Pixel 10", 1, "Android Phone",
+                                "Ping Guo Inc");
+                productServiceImpl.createProductSetSeller(3,"Google Pixel 10", 1, "Android Phone",
                                 Category.ELECTRONICS, Status.ACTIVE, 2000.0,
-                                "Googol"));
+                                "Googol");
 
                 // create orders
                 orderServiceImpl.createOrder(1);
@@ -155,6 +190,7 @@ public class DataLoaderJian {
                 */
 
                 // cartRepository
+
                 cartServiceImpl.createCartById(1);
                 cartServiceImpl.createCartById(2);
                 cartServiceImpl.createCartById(3);

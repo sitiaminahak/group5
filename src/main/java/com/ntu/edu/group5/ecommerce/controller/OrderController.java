@@ -42,7 +42,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Order> createOrder(@RequestBody TemplateOrder dataOrder) {
-        Order newOrder = orderServ.createOrder(dataOrder.getCustomerId());
+        Order newOrder = orderServ.createOrder(dataOrder.getaddressId());
         return new ResponseEntity<>(newOrder, HttpStatus.OK);
     }
 
@@ -60,20 +60,10 @@ public class OrderController {
 
     @PutMapping("/{orderId}")
     public ResponseEntity<Order> setOrder(@PathVariable long orderId , @RequestBody TemplateOrder dataOrder){
-        Order setOrder = orderServ.setOrder(orderId, dataOrder.getCustomerId(), dataOrder.getcartItemId());
+        Order setOrder = orderServ.setOrder(orderId, dataOrder.getaddressId(), dataOrder.getcartItemId());
         return new ResponseEntity<>(setOrder, HttpStatus.OK);
         /*
-        * { "customerId":1, "productId":2, "cartItemId":5}
-        */
-    }
-
-    // add more Cart Items into an existing Order
-    @PutMapping("/addCart/{orderId}")
-    public ResponseEntity<List<CartItem>> addCartItemIntoOrder (@PathVariable long orderId , @RequestBody TemplateOrder dataOrder){
-        List<CartItem> addCartItems = orderServ.addCartItem(orderId, dataOrder.getProductId(), dataOrder.getQuantity());
-        return new ResponseEntity<>(addCartItems, HttpStatus.OK);
-        /*
-        * { "productId":6, "quantity":200}
+        * { "addressId":1, "productId":2, "cartItemId":5}
         */
     }
 
@@ -87,7 +77,7 @@ public class OrderController {
 
 class TemplateOrder{
 
-    long customerId;
+    long addressId;
     long cartItemId;
     long productId;
 
@@ -98,11 +88,11 @@ class TemplateOrder{
         this.productId = productId;
     }
     int quantity;
-    public long getCustomerId() {
-        return customerId;
+    public long getaddressId() {
+        return addressId;
     }
-    public void setCustomerId(long customerId) {
-        this.customerId = customerId;
+    public void setaddressId(long addressId) {
+        this.addressId = addressId;
     }
     public long getcartItemId() {
         return cartItemId;

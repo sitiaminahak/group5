@@ -4,11 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.geo.Point;
 import org.springframework.stereotype.Service;
 
 import com.ntu.edu.group5.ecommerce.entity.CartItem;
 import com.ntu.edu.group5.ecommerce.entity.Product;
 import com.ntu.edu.group5.ecommerce.entity.Seller;
+import com.ntu.edu.group5.ecommerce.entity.Category;
+import com.ntu.edu.group5.ecommerce.entity.Status;
 import com.ntu.edu.group5.ecommerce.exception.CartItemNotFoundException;
 import com.ntu.edu.group5.ecommerce.exception.ProductNotFoundException;
 import com.ntu.edu.group5.ecommerce.exception.SellerNotFoundException;
@@ -18,6 +23,8 @@ import com.ntu.edu.group5.ecommerce.repository.SellerRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private ProductRepository productRepository;
     private SellerRepository sellerRepository;
@@ -41,6 +48,21 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(Product product) {
         Product newProduct = productRepository.save(product);
+        return newProduct;
+    }
+
+    //231214 -zj add in
+    public Product createProductSetSeller(long sellerId, String name, int quantity, String description, Category category, Status status, double price, String manufacturer ) {
+        Product newProduct = new Product(name,quantity,description,category,status,price,manufacturer);
+        Seller foundSeller = null;
+        try {
+            logger.info("🧾🔵 finding foundSeller ... " + sellerId);
+            foundSeller =  sellerRepository.findById(sellerId).orElseThrow(()-> new SellerNotFoundException(sellerId));;
+        } catch (Exception e){
+            logger.error("🧾🔴 Error finding foundSeller "+ e);
+        }
+        newProduct.setSeller(foundSeller);
+        productRepository.save(newProduct);
         return newProduct;
     }
 

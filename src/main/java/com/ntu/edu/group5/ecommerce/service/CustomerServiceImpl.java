@@ -27,8 +27,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer createCustomer(Customer customer) {
-        Customer newCustomer = customerRepository.save(customer);
+    public Customer createCustomer(String firstName, String lastName,
+                                    String email, String contactNo,
+                                    int YOB) {
+
+        Customer newCustomer = new Customer(firstName,lastName,email,contactNo,YOB);
+        customerRepository.save(newCustomer);
         return newCustomer;
     }
 
@@ -60,7 +64,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerToUpdate.setLastName(customer.getLastName());
         customerToUpdate.setEmail(customer.getEmail());
         customerToUpdate.setContactNo(customer.getContactNo());
-        customerToUpdate.setJobTitle(customer.getJobTitle());
         customerToUpdate.setYearOfBirth(customer.getYearOfBirth());
         customerToUpdate.setCustomerCart(customer.getCustomerCart());
         // save the updated customer back to the database

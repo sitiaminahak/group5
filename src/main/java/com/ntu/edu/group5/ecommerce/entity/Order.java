@@ -21,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
@@ -44,14 +45,21 @@ public class Order {
     @CreationTimestamp
     private Timestamp orderDate;
 
+    //231214 - customer links to orders as well as customer
     @JsonBackReference
     @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer orderingCustomer;
 
     //CartItem (inverse side / Many) <--> Order (owner side / One)
-    @OneToMany(mappedBy = "order",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "order",cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     List <CartItem> orderedItems;
+
+    //231214 -Join address to order
+    @OneToOne
+    @JsonBackReference
+    @JoinColumn(name="address", referencedColumnName = "id")
+    private Address orderAddress;
 
     @Enumerated(EnumType.STRING)
     @Column(name="order_status")
@@ -60,16 +68,15 @@ public class Order {
     @Column(name = "total")
     private double total;
 
-    //TODO
-    //add in Address class interface with Sariha
-
     public Order (){
         this.orderStatus= OrderStatus.PENDING;
     }
 
-    public Order(Customer orderingCustomer, List<CartItem> orderedItems) {
+    public Order(Address orderAddress, List<CartItem> orderedItems) {
         this.orderStatus= OrderStatus.PENDING;
-        this.orderingCustomer = orderingCustomer;
+        //231214 - break connection order <->customer, make connection order<->address
+        //this.orderingCustomer = orderingCustomer;
+        this.orderAddress = orderAddress;
         this.orderedItems = orderedItems;
     }
 
@@ -81,7 +88,6 @@ public class Order {
             double unitPrice = currCart.getProduct().getPrice() ;
             double unitQuantity = currCart.getCartItemQuantity();
             double subTotal = unitPrice * unitQuantity;
-            System.out.println("🔵🔵 cartItem: " + i + " price " + unitPrice + " subTotal: " + unitQuantity);
             countTotal += subTotal;
         }
         return countTotal;
@@ -89,7 +95,7 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order [orderId=" + orderId + ", orderDate=" + orderDate + ", orderingCustomer=" + orderingCustomer
+        return "Order [orderId=" + orderId + ", orderDate=" + orderDate + ", orderAddress=" + orderAddress
                 + ", orderedItems=" + orderedItems + ", total=" + total + "]";
     }
 

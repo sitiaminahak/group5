@@ -30,15 +30,13 @@ public class CartItem {
     private Long id;
 
 
-    //@OneToOne //original
-    @OneToOne(cascade = CascadeType.MERGE)// new 231213
+    @OneToOne //original
     @JoinColumn(name = "product_id", referencedColumnName = "id")
     private Product product;
 
     //Jian add in here 231212 --->
     @JsonBackReference
-    //@ManyToOne(optional = false) //original
-    @ManyToOne(cascade = CascadeType.MERGE)// new 231213
+    @ManyToOne(optional = false) //original
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
     //end                     <---
@@ -47,8 +45,7 @@ public class CartItem {
     private int cartItemQuantity;
 
     @JsonBackReference
-    //@ManyToOne//original
-    @ManyToOne(cascade = CascadeType.MERGE)// new 231213
+    @ManyToOne//original
     @JoinColumn(name = "cart_id", referencedColumnName = "id")
     private Cart cart;
 

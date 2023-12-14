@@ -54,10 +54,21 @@ public class Seller {
     @OneToMany(mappedBy = "seller")
     private List<Product> products;
 
+    public Seller(@NotBlank(message = "First name is mandatory") String firstName, String lastName,
+            @Email(message = "Email should be valid") String email,
+            @Digits(fraction = 0, integer = 8, message = "Contact no should be 8 digits") String contactNo,
+            String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.contactNo = contactNo;
+        this.password = password;
+    }
+
     // public Seller(String firstName, String lastName, String contactNo) {
     // this.firstName = firstName;
     // this.lastName = lastName;
     // this.contactNo = contactNo;
     // }
-
+        
 }

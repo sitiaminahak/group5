@@ -6,7 +6,7 @@ import com.ntu.edu.group5.ecommerce.entity.Customer;
 
 public interface CustomerService {
 
-    Customer createCustomer(Customer customer);
+    Customer createCustomer(String firstName, String lastName,String email, String contactNo,int YOB);
 
     Customer getCustomer(Long id);
 
