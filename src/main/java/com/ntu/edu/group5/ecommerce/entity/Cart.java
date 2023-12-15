@@ -50,8 +50,17 @@ public class Cart {
 
     // TO-DO to implement the logic to get the cart total price from cartItem
     // Quantity * price from product
-    public Cart(double cartTotal) {
-        this.cartTotal = cartTotal;
+    public double getCartTotal() {
+        double sum = 0;
+        if (!cartItems.isEmpty()) {
+            for (CartItem cartItem : cartItems) {
+                sum += cartItem.getCartItemQuantity() * cartItem.getProduct().getPrice();
+            }
+        }
+
+        String formattedSum = String.format("%.2f", sum);
+        double totalSum = Double.parseDouble(formattedSum);
+        return totalSum;
     }
 
 }

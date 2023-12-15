@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ntu.edu.group5.ecommerce.entity.Product;
 import com.ntu.edu.group5.ecommerce.entity.Seller;
 import com.ntu.edu.group5.ecommerce.service.SellerService;
 
@@ -36,7 +37,7 @@ public class SellerController {
         return new ResponseEntity<>(foundSellers, HttpStatus.OK);
     }
 
-    // CREATE
+    // CREATE *****
     @PostMapping("")
     public ResponseEntity<Seller> createSeller(@Valid @RequestBody Seller seller) {
 
@@ -73,6 +74,13 @@ public class SellerController {
     public ResponseEntity<Seller> deleteSeller(@PathVariable Long id) {
         sellerService.deleteSeller(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // Nested route - add product to seller
+    @PostMapping("/{id}/products")
+    public ResponseEntity<Product> addProductToSeller(@PathVariable Long id, @Valid @RequestBody Product product) {
+        Product newProduct = sellerService.addProductToSeller(id, product);
+        return new ResponseEntity<>(newProduct, HttpStatus.CREATED);
     }
 
 }

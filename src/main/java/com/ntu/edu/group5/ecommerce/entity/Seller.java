@@ -65,10 +65,4 @@ public class Seller {
         this.password = password;
     }
 
-    // public Seller(String firstName, String lastName, String contactNo) {
-    // this.firstName = firstName;
-    // this.lastName = lastName;
-    // this.contactNo = contactNo;
-    // }
-        
 }

@@ -11,8 +11,8 @@ com/ntu/edu/group5/ecommerce/entity/Customer$CustomerBuilder.class
 com/ntu/edu/group5/ecommerce/service/ProductService.class
 com/ntu/edu/group5/ecommerce/controller/CartController.class
 com/ntu/edu/group5/ecommerce/EcommerceApplication.class
-com/ntu/edu/group5/ecommerce/service/OrderServiceImpl$6.class
 com/ntu/edu/group5/ecommerce/repository/SellerRepository.class
+com/ntu/edu/group5/ecommerce/controller/TemplateCustomer.class
 com/ntu/edu/group5/ecommerce/DataLoaderJian.class
 com/ntu/edu/group5/ecommerce/exception/OrderNotFoundException.class
 com/ntu/edu/group5/ecommerce/service/AddressServiceImpl.class
@@ -23,7 +23,6 @@ com/ntu/edu/group5/ecommerce/service/CartService.class
 com/ntu/edu/group5/ecommerce/entity/Product.class
 com/ntu/edu/group5/ecommerce/controller/CustomerController.class
 com/ntu/edu/group5/ecommerce/entity/Customer.class
-com/ntu/edu/group5/ecommerce/service/OrderServiceImpl$7.class
 com/ntu/edu/group5/ecommerce/entity/Order.class
 com/ntu/edu/group5/ecommerce/controller/CartItemController.class
 com/ntu/edu/group5/ecommerce/entity/Address$AddressBuilder.class
@@ -44,6 +43,7 @@ com/ntu/edu/group5/ecommerce/controller/SellerController.class
 com/ntu/edu/group5/ecommerce/exception/SellerNotFoundException.class
 com/ntu/edu/group5/ecommerce/exception/CartItemNotFoundException.class
 com/ntu/edu/group5/ecommerce/service/SellerService.class
+com/ntu/edu/group5/ecommerce/controller/TemplateAdress.class
 com/ntu/edu/group5/ecommerce/entity/Cart.class
 com/ntu/edu/group5/ecommerce/service/OrderServiceImpl$4.class
 com/ntu/edu/group5/ecommerce/repository/AddressRepository.class
@@ -56,9 +56,9 @@ com/ntu/edu/group5/ecommerce/controller/ProductController.class
 com/ntu/edu/group5/ecommerce/service/CartItemServiceImpl$2.class
 com/ntu/edu/group5/ecommerce/service/CustomerServiceImpl.class
 com/ntu/edu/group5/ecommerce/exception/CartNotFoundException.class
+com/ntu/edu/group5/ecommerce/service/SellerServiceforTest.class
 com/ntu/edu/group5/ecommerce/entity/CartItem.class
 com/ntu/edu/group5/ecommerce/exception/AddressNotFoundException.class
-com/ntu/edu/group5/ecommerce/service/OrderServiceImpl$5.class
 com/ntu/edu/group5/ecommerce/controller/DataTemplateCartItem.class
 com/ntu/edu/group5/ecommerce/repository/ProductRepository.class
 com/ntu/edu/group5/ecommerce/entity/Order$OrderStatus.class
