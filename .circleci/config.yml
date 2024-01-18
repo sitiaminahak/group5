@@ -9,6 +9,10 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:17.0.9
+    steps:
+      - checkout
+      - run: 
+          echo "Running build..."
 
   test:
     docker:
@@ -108,3 +112,6 @@ workflows:
       - publish:
           requires:
             - scan
+      - deploy:
+          requires:
+            - publish
