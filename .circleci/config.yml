@@ -11,16 +11,14 @@ jobs:
       - image: cimg/openjdk:17.0.9
     steps:
       - checkout
-      - run: 
-          echo "Running build..."
+      - run: mvn clean package -DskipTests=true
 
   test:
     docker:
       - image: cimg/openjdk:17.0.9
     steps:
       - checkout
-      - run: 
-          echo "Running tests..."
+      - run: mvn clean package -DskipTests=true
 
   scan:
     docker:
