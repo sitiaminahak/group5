@@ -1,0 +1,110 @@
+version: 2.1
+
+orbs: 
+  docker: circleci/docker@2.1.4
+  heroku: circleci/heroku@2.0.0
+  snyk: snyk/snyk@1.5.0
+
+jobs:
+  build:
+    docker:
+      - image: cimg/openjdk:17.0.9
+
+  test:
+    docker:
+      - image: cimg/openjdk:17.0.9
+    steps:
+      - checkout
+      - run: 
+          echo "Running tests..."
+
+  scan:
+    docker:
+      - image: cimg/node:16.10
+    environment:
+        IMAGE_NAME: sitiaminahak/group5
+    steps:
+      - checkout
+      - setup_remote_docker
+      - docker/check
+      - run: docker build -t $IMAGE_NAME .
+      - snyk/scan:
+          docker-image-name: $IMAGE_NAME
+          fail-on-issues: false
+
+  publish:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build:
+          image: sitiaminahak/group5
+          tag: v1.0.1
+      - docker/push:
+          image: sitiaminahak/group5
+          tag: v1.0.1
+  deploy: 
+    docker:
+      - image: cimg/openjdk:17.0.9
+    steps:
+      - setup_remote_docker
+      - checkout
+      - heroku/install
+      - run:
+          name: Heroku Container Push
+          command: |
+              heroku container:login
+              heroku container:push web -a sitidevops
+              heroku container:release web -a sitidevops
+  # pull-and-deploy:
+  #   docker:
+  #     - image: cimg/node:16.10
+  #   steps:
+  #     - setup_remote_docker
+  #     - heroku/install
+  #     - docker/pull:
+  #         images: sitiaminahak/education-space:v1.0.1
+  #     - run:
+  #         name: Heroku Container Push
+  #         command: |
+  #             heroku container:login
+  #             docker tag sitiaminahak/education-space:v1.0.1 registry.heroku.com/sitidevops/web
+  #             # format --- docker tag <image name from docker hub> registry.heroku.com/<app-name>/web
+  #             docker push registry.heroku.com/sitidevops/web
+  #             # format --- docker push <registry.heroku.com/<app-name>/web
+  #             heroku container:release web -a sitidevops
+
+# workflows: 
+#   simple_workflow:
+#     jobs:
+#       - build
+#       - test:
+#           requires:
+#             - build
+#       - publish:
+#           requires:
+#             - test
+#           filters: 
+#             branches:
+#               ignore: main
+#       - deploy:
+#           requires:
+#             - publish
+#           filters: 
+#             branches:
+#               ignore: main
+
+workflows:
+  simple_workflow:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - scan:
+          requires:
+            - test
+      - publish:
+          requires:
+            - scan
