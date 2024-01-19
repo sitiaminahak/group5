@@ -94,6 +94,9 @@ jobs:
 
 workflows: 
   ci_workflow:
+    filters: 
+    branches:
+      only: develop
     jobs:
       - build
       - test:
@@ -105,11 +108,11 @@ workflows:
       - publish:
           requires:
             - test
-          filters: 
-            branches:
-              only: develop
 
   cicd_workflow:
+    filters: 
+    branches:
+      only: release
     jobs:
       - build
       - test:
@@ -124,7 +127,5 @@ workflows:
       - pull-and-deploy:
           requires:
             - publish
-          filters: 
-            branches:
-              only: release
+
 
