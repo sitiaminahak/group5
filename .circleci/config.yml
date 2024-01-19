@@ -128,19 +128,3 @@ workflows:
             branches:
               only: release
 
-# workflows:
-#   simple_workflow:
-#     jobs:
-#       - build
-#       - test:
-#           requires:
-#             - build
-#       - scan:
-#           requires:
-#             - test
-#       - publish:
-#           requires:
-#             - scan
-#       - deploy:
-#           requires:
-#             - publish
