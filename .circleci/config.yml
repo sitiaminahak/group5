@@ -93,26 +93,7 @@ jobs:
               heroku container:release web -a sitidevops
 
 workflows: 
-  ci_workflow:
-    filters: 
-    branches:
-      only: develop
-    jobs:
-      - build
-      - test:
-          requires:
-            - build
-      - scan:
-          requires:
-            - test
-      - publish:
-          requires:
-            - test
-
   cicd_workflow:
-    filters: 
-    branches:
-      only: release
     jobs:
       - build
       - test:
