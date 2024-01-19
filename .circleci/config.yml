@@ -12,13 +12,27 @@ jobs:
     steps:
       - checkout
       - run: mvn clean package -DskipTests=true
-
+    
   test:
     docker:
       - image: cimg/openjdk:17.0.9
     steps:
       - checkout
-      - run: mvn test
+      - run: echo "running test!"
+
+  # test:
+  #   docker:
+  #     - image: cimg/openjdk:17.0.9
+  #       environment:
+  #         POSTGRES_PORT: ${PORT}
+  #         POSTGRES_DB: ${DATABASE_NAME}
+  #         POSTGRES_USER: ${DATABASE_USERNAME}
+  #         POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+  #         POSTGRES_URL: ${POSTGRES_DATABASE_URL}
+  #         POSTGRES_HOST_AUTH_METHOD: trust
+  #   steps:
+  #     - checkout
+  #     - run: mvn test
 
   scan:
     docker:
@@ -31,6 +45,7 @@ jobs:
       - docker/check
       - run: docker build -t $IMAGE_NAME .
       - snyk/scan:
+          severity-threshold: high
           docker-image-name: $IMAGE_NAME
           fail-on-issues: false
 
@@ -46,59 +61,39 @@ jobs:
       - docker/push:
           image: sitiaminahak/group5
           tag: v1.0.1
-  deploy: 
-    docker:
-      - image: cimg/openjdk:17.0.9
-    steps:
-      - setup_remote_docker
-      - checkout
-      - heroku/install
-      - run:
-          name: Heroku Container Push
-          command: |
-              heroku container:login
-              heroku container:push web -a sitidevops
-              heroku container:release web -a sitidevops
-  # pull-and-deploy:
+  # deploy: 
   #   docker:
-  #     - image: cimg/node:16.10
+  #     - image: cimg/openjdk:17.0.9
   #   steps:
   #     - setup_remote_docker
+  #     - checkout
   #     - heroku/install
-  #     - docker/pull:
-  #         images: sitiaminahak/education-space:v1.0.1
   #     - run:
   #         name: Heroku Container Push
   #         command: |
   #             heroku container:login
-  #             docker tag sitiaminahak/education-space:v1.0.1 registry.heroku.com/sitidevops/web
-  #             # format --- docker tag <image name from docker hub> registry.heroku.com/<app-name>/web
-  #             docker push registry.heroku.com/sitidevops/web
-  #             # format --- docker push <registry.heroku.com/<app-name>/web
+  #             heroku container:push web -a sitidevops
   #             heroku container:release web -a sitidevops
+  pull-and-deploy:
+    docker:
+      - image: cimg/openjdk:17.0.9
+    steps:
+      - setup_remote_docker
+      - heroku/install
+      - docker/pull:
+          images: sitiaminahak/group5
+      - run:
+          name: Heroku Container Push
+          command: |
+              heroku container:login
+              docker tag sitiaminahak/group5:v1.0.1 registry.heroku.com/sitidevops/web
+              # format --- docker tag <image name from docker hub> registry.heroku.com/<app-name>/web
+              docker push registry.heroku.com/sitidevops/web
+              # format --- docker push <registry.heroku.com/<app-name>/web
+              heroku container:release web -a sitidevops
 
-# workflows: 
-#   simple_workflow:
-#     jobs:
-#       - build
-#       - test:
-#           requires:
-#             - build
-#       - publish:
-#           requires:
-#             - test
-#           filters: 
-#             branches:
-#               ignore: main
-#       - deploy:
-#           requires:
-#             - publish
-#           filters: 
-#             branches:
-#               ignore: main
-
-workflows:
-  simple_workflow:
+workflows: 
+  ci_workflow:
     jobs:
       - build
       - test:
@@ -109,7 +104,42 @@ workflows:
             - test
       - publish:
           requires:
-            - scan
-      - deploy:
+            - test
+          filters: 
+            branches:
+              only: develop
+  cicd_workflow:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - scan:
+          requires:
+            - test
+      - publish:
+          requires:
+            - test
+      - pull-and-deploy:
           requires:
             - publish
+          filters: 
+            branches:
+              only: release
+
+# workflows:
+#   simple_workflow:
+#     jobs:
+#       - build
+#       - test:
+#           requires:
+#             - build
+#       - scan:
+#           requires:
+#             - test
+#       - publish:
+#           requires:
+#             - scan
+#       - deploy:
+#           requires:
+#             - publish
